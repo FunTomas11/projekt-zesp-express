@@ -1,4 +1,4 @@
-const db = require('../bar_assistant.db');
+const db = require('../db');
 const bcrypt = require('bcrypt');
 
 async function createUser(username, password) {
