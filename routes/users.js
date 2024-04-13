@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const { randomUUID } = require('crypto');
 
 const { createUser, login } = require('../db/models/user');
 
@@ -22,11 +23,11 @@ router.post('/register', async (req, res) => {
 
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
+  const sessionId = req.body.sessionId || randomUUID();
 
   try {
       const user = await login(username, password);
-      req.session.userId = user.id;
-      res.json({ message: 'Login successful', user });
+      res.json({ message: 'Login successful', user, sessionId });
   } catch (err) {
       console.error(err);
       res.status(401).json({ error: err.message });
