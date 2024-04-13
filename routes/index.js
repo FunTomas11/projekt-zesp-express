@@ -1,6 +1,7 @@
-const { randomUUID } = require('crypto');
 var express = require('express');
 var router = express.Router();
+
+const { randomUUID } = require('crypto');
 const { Ollama } = require('ollama');
 
 const conversations = {};
@@ -37,6 +38,7 @@ router.post('/chat', async (req, res) => {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+
   res.render('index', { title: "world" });
 });
 
