@@ -12,8 +12,6 @@ router.post('/chat', async (req, res) => {
 
   const ollama = new Ollama();
 
-  console.log(req.sessionID);
-
   let conversationHistory = conversations[sessionId] || [];
   conversationHistory.push({ role: 'user', content: userMessage });
   console.log(conversationHistory);
@@ -28,7 +26,7 @@ router.post('/chat', async (req, res) => {
 
     console.log(sessionId);
 
-    res.json({ response: response.message.content, sessionId: sessionId});
+    res.json({ response: response.message.content, sessionId });
 
   } catch (error) {
       console.error('Ollama error:', error);
