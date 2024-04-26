@@ -1,7 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import {MatDialog, MatDialogModule} from "@angular/material/dialog";
-import {LoginComponent} from "./components/login/login.component";
+import {MatDialogModule} from "@angular/material/dialog";
 import { ChatComponent } from './components/chat/chat.component';
 
 @Component({
@@ -11,25 +10,6 @@ import { ChatComponent } from './components/chat/chat.component';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit {
-  title = 'ClientApp';
-
-  private _isLoggedIn = false; // TODO: Change after login implemented
-
-  constructor(private _dialog: MatDialog) {
-  }
-
-  ngOnInit(): void {
-    // if (!this._isLoggedIn) {
-    //   this._openLoginDialog();
-    // }
-    
-  }
-
-  private _openLoginDialog() {
-    this._dialog.open(LoginComponent, {
-      width: '250px',
-      data: {name: 'test'}
-    });
-  }
+export class AppComponent {
+  // private _isLoggedIn = false; // TODO: Change after login implemented
 }
