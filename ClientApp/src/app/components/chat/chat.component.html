@@ -1,7 +1,6 @@
 <div class="container">
   <div class="header">
     <h2>Bar Assistant</h2>
-<<<<<<< HEAD
 </div>
 
 <div class="chat-container">
@@ -13,20 +12,10 @@
               <span *ngIf="message.role === 'user'">💁🏻‍♀️</span>
               <span *ngIf="message.role !== 'user'">🧚🏻‍♀️</span>
             </p>
-=======
-  </div>
-  <div class="chat-container">
-    <div class="message-area">
-      <div *ngFor="let message of messages">
-        <div [ngClass]="message.role == 'user' ? 'userMsg' : 'botMsg'">
-          <p>{{ message.role }}:</p>
-          <p>{{ message.content }}</p>
->>>>>>> 51b864e66084f3b2aa1b89fe99e32d95008d8351
         </div>
       </ng-container>
     </div>
 
-<<<<<<< HEAD
     <form 
       class="input-form"
     >
@@ -42,24 +31,9 @@
       >
         🪄
       </button>
-=======
-    <form
-      [formGroup]="chatInputForm"
-      (ngSubmit)="sendMessage()"
-      class="input-form"
-    >
-      <mat-form-field class="message-input">
-        <input class="dupppppaaa" formControlName="message" matInput placeholder="Type your message..." [(ngModel)]="newMessage">
-      </mat-form-field>
-      <button mat-raised-button color="primary" (click)="sendMessage()">Send</button>
->>>>>>> 51b864e66084f3b2aa1b89fe99e32d95008d8351
     </form>
   </div>
 </div>
-<<<<<<< HEAD
-</div>
 
 
 
-=======
->>>>>>> 51b864e66084f3b2aa1b89fe99e32d95008d8351
