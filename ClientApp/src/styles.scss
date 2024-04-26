@@ -1,16 +1,25 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
 /* You can add global styles to this file, and also import other style files */
 $bgc-color: #303030;
 $font-color: ghostwhite;
 
 html, body {
   height: 100%;
+  background-image: linear-gradient(to bottom right, purple, pink);
 }
 
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: 'Montserrat', sans-serif;
   background-color: $bgc-color;
   color: $font-color;
+
+  &, *, *::after, *::before {
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif !important;
+  }
 }
 
 mat-form-field {

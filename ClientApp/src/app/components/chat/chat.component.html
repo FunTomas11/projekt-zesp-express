@@ -5,24 +5,36 @@
 </div>
 
 <div class="chat-container">
-    <div class="message-area">
-      <div *ngFor="let message of messages">
-        <div [ngClass]="message.role == 'user' ? 'userMsg' : 'botMsg'">
-            <p>{{ message.role }}:</p>
-            <p>{{ message.content }}</p>
+    <div class="chat-area" #scrollContainer>
+      <ng-container *ngFor="let message of messages">
+        <div [ngClass]="message.role === 'user' ? 'userMsg' : 'botMsg'">
+            <p class="content">{{ message.content }}</p>
+            <p class="role">
+              <span *ngIf="message.role === 'user'">💁🏻‍♀️</span>
+              <span *ngIf="message.role !== 'user'">🧚🏻‍♀️</span>
+            </p>
         </div>
-      </div>
+      </ng-container>
     </div>
 
     <form 
-      [formGroup]="chatInputForm"
-      (ngSubmit)="sendMessage()"
       class="input-form"
     >
-      <mat-form-field class="message-input">
-        <input class="dupppppaaa" matInput placeholder="Type your message..." [(ngModel)]="newMessage">
-      </mat-form-field>
-      <button mat-raised-button color="primary" (click)="sendMessage()">Send</button>
+      <input
+        #messageInput
+        class="input" 
+        placeholder="Type your message..."
+      >
+      <button
+        class="button"
+        type="submit"
+        (click)="sendMessage(messageInput.value)"
+      >
+        🪄
+      </button>
     </form>
 </div>
 </div>
+
+
+

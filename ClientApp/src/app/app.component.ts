@@ -3,11 +3,12 @@ import { RouterOutlet } from '@angular/router';
 import {MatDialog, MatDialogModule} from "@angular/material/dialog";
 import {LoginComponent} from "./components/login/login.component";
 import { ChatComponent } from './components/chat/chat.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, MatDialogModule, ChatComponent],
+  imports: [RouterOutlet, MatDialogModule, ChatComponent, HttpClientModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
