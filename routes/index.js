@@ -7,14 +7,19 @@ const { Ollama } = require('ollama');
 const conversations = {};
 
 router.post('/chat', async (req, res) => {
-  const sessionId = req.body.sessionId || randomUUID();
   const userMessage = req.body.message;
+
+  let sessionId = req.headers['session-id'];
+  if (!sessionId) {
+    sessionId = randomUUID();
+    res.setHeader('session-id', sessionId);
+  }
 
   const ollama = new Ollama();
 
   let conversationHistory = conversations[sessionId] || [];
   conversationHistory.push({ role: 'user', content: userMessage });
-  console.log(conversationHistory);
+
   try {
     const response = await ollama.chat({
         model: 'gemma:2b',
@@ -24,9 +29,10 @@ router.post('/chat', async (req, res) => {
     conversationHistory.push({ role: 'assistant', content: response.message.content });
     conversations[sessionId] = conversationHistory;
 
-    console.log(sessionId);
+    res.json({ response: response.message.content });
 
-    res.json({ response: response.message.content, sessionId });
+    console.log(sessionId);
+    console.log(conversations[sessionId]);
 
   } catch (error) {
       console.error('Ollama error:', error);

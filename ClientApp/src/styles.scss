@@ -12,3 +12,10 @@ body {
   background-color: $bgc-color;
   color: $font-color;
 }
+
+mat-form-field {
+  .mat-mdc-text-field-wrapper {
+    border-radius: 8px;
+    overflow: hidden;
+  }
+}

@@ -2,11 +2,12 @@ import {Component, OnInit} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import {MatDialog, MatDialogModule} from "@angular/material/dialog";
 import {LoginComponent} from "./components/login/login.component";
+import { ChatComponent } from './components/chat/chat.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, MatDialogModule],
+  imports: [RouterOutlet, MatDialogModule, ChatComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -19,9 +20,10 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (!this._isLoggedIn) {
-      this._openLoginDialog();
-    }
+    // if (!this._isLoggedIn) {
+    //   this._openLoginDialog();
+    // }
+    
   }
 
   private _openLoginDialog() {

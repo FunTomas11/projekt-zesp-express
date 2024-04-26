@@ -1,0 +1,20 @@
+.container {
+    padding: 50px;
+}
+
+.chat-container {
+    position: absolute;
+    bottom: 0;
+
+    .input-form {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        .message-input {
+            width: 80vw;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+    }
+}
