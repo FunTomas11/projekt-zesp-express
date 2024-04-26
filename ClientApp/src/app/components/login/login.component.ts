@@ -19,7 +19,12 @@ export class LoginComponent {
     loginForm = new FormGroup({
         username: new FormControl('', Validators.required),
         password: new FormControl('', Validators.required)
-    })
+    });
+
+    registerForm = new FormGroup({
+      username: new FormControl('', Validators.required),
+      password: new FormControl('', Validators.required)
+    });
 
     constructor(private _backend: LoginService) {
     }
@@ -34,6 +39,23 @@ export class LoginComponent {
             return;
         }
         const user: User = {username: this.loginForm.value.username, password: this.loginForm.value.password};
+
+        this._backend.loginUser(user).subscribe((res) => {
+            console.log('Co backend ma na myśli', res);
+        });
+
+    }
+
+    register() {
+        if (!this.registerForm.value.username ||
+            !this.registerForm.value.password ||
+            this.registerForm.value.username === '' ||
+            this.registerForm.value.password === '') {
+            console.error('Please fill in all fields', this.registerForm.value);
+
+            return;
+        }
+        const user: User = {username: this.registerForm.value.username, password: this.registerForm.value.password};
 
         this._backend.registerUser(user).subscribe((res) => {
             console.log('Co backend ma na myśli', res);
