@@ -1,0 +1,107 @@
+[
+  {
+    "id": 1,
+    "name": "Aperol Spritz",
+    "recipe": "Fill a wine glass or a large balloon glass with ice cubes.\nPour the Prosecco into the glass, filling it about one-third full.\nAdd the Aperol, followed by a splash of soda water.\nStir gently to combine.\nGarnish with an orange slice.\nServe immediately with a straw."
+  },
+  {
+    "id": 2,
+    "name": "Bloody Mary",
+    "recipe": "Rim the rim of a highball glass with celery salt (optional).\nFill the glass with ice cubes.\nPour vodka, tomato juice, and lemon juice over the ice.\nAdd a dash of Worcestershire sauce and hot sauce to taste.\nSeason with a pinch of salt and black pepper.\nStir well to combine all the ingredients.\nGarnish with a celery stalk, lemon wedge, and/or olives.\nServe immediately and enjoy your Bloody Mary!"
+  },
+  {
+    "id": 3,
+    "name": "Blue Lagoon",
+    "recipe": "Fill a highball glass with ice cubes.\nPour vodka and blue curaçao liqueur over the ice.\nTop up with lemonade or sprite.\nStir gently to combine all the ingredients.\nGarnish with a lemon slice or maraschino cherry.\nServe immediately and enjoy your refreshing Blue Lagoon cocktail!"
+  },
+  {
+    "id": 4,
+    "name": "Cosmopolitan",
+    "recipe": "Fill a cocktail shaker with ice cubes.\nAdd vodka, triple sec, cranberry juice, and freshly squeezed lime juice to the shaker.\nShake well until the mixture is thoroughly chilled.\nStrain the mixture into a chilled cocktail glass.\nGarnish with a lime twist or orange twist.\nServe immediately and enjoy your delicious Cosmopolitan cocktail!"
+  },
+  {
+    "id": 5,
+    "name": "Cuba Libre",
+    "recipe": "Fill a highball glass with ice cubes.\nSqueeze the lime juice into the glass.\nPour the light rum over the ice and lime juice.\nTop up with cola.\nStir gently to combine all the ingredients.\nGarnish with a lime wedge.\nServe immediately and enjoy your refreshing Cuba Libre!"
+  },
+  {
+    "id": 6,
+    "name": "Daiquiri",
+    "recipe": "Fill a cocktail shaker with ice cubes.\nAdd white rum, freshly squeezed lime juice, and simple syrup to the shaker.\nShake well until the mixture is thoroughly chilled.\nStrain the mixture into a chilled cocktail glass.\nGarnish with a lime wheel or lime twist.\nServe immediately and enjoy your refreshing Daiquiri!"
+  },
+  {
+    "id": 7,
+    "name": "Gin & Tonic",
+    "recipe": "Fill a highball glass with ice cubes.\nPour the gin over the ice.\nTop up with tonic water.\nStir gently to combine.\nGarnish with a lime wedge or slice.\nServe immediately and enjoy your refreshing Gin and Tonic!"
+  },
+  {
+    "id": 8,
+    "name": "Hugo",
+    "recipe": "Fill a wine glass or a large balloon glass with ice cubes.\nAdd the elderflower syrup or liqueur, freshly squeezed lime juice, and fresh mint leaves to the glass.\nPour in the Prosecco.\nTop up with soda water.\nStir gently to combine all the ingredients.\nGarnish with a lime wheel or mint sprig if desired.\nServe immediately and enjoy your refreshing Hugo cocktail!"
+  },
+  {
+    "id": 9,
+    "name": "Long Island Ice Tea",
+    "recipe": "Fill a cocktail shaker with ice cubes.\nAdd vodka, white rum, gin, tequila, triple sec, freshly squeezed lemon juice, and simple syrup to the shaker.\nShake well until the mixture is thoroughly chilled.\nFill a highball glass with ice cubes.\nStrain the mixture into the glass.\nTop up with cola.\nStir gently to combine.\nGarnish with a lemon wedge or twist.\nServe immediately and enjoy your Long Island Iced Tea!"
+  },
+  {
+    "id": 10,
+    "name": "Mai Tai",
+    "recipe": "Fill a cocktail shaker with ice cubes.\nAdd white rum, dark rum, orange curaçao liqueur, orgeat syrup, and freshly squeezed lime juice to the shaker.\nShake well until the mixture is thoroughly chilled.\nFill a rocks glass with crushed ice.\nStrain the mixture into the glass.\nGarnish with a pineapple wedge and/or maraschino cherry.\nServe immediately and enjoy your delicious Mai Tai!"
+  },
+  {
+    "id": 11,
+    "name": "Margarita",
+    "recipe": "If desired, rim the rim of a margarita glass with salt. To do this, rub a lime wedge around the rim of the glass, then dip the rim into a plate of salt.\nFill a cocktail shaker with ice cubes.\nAdd tequila, triple sec, freshly squeezed lime juice, and simple syrup or agave nectar to the shaker.\nShake well until the mixture is thoroughly chilled.\nFill the margarita glass with ice cubes.\nStrain the mixture into the glass.\nGarnish with a lime wedge.\nServe immediately and enjoy your refreshing Margarita!"
+  },
+  {
+    "id": 12,
+    "name": "Martini",
+    "recipe": "Fill a mixing glass or cocktail shaker with ice cubes.\nAdd gin or vodka and dry vermouth to the glass or shaker.\nStir or shake the mixture well until thoroughly chilled.\nStrain the mixture into a chilled martini glass.\nGarnish with a lemon twist or olive.\nServe immediately and enjoy your classic Martini!"
+  },
+  {
+    "id": 13,
+    "name": "Mohito",
+    "recipe": "In a highball glass, muddle the fresh mint leaves with the simple syrup and freshly squeezed lime juice.\nFill the glass with ice cubes.\nPour the white rum over the ice.\nTop up with soda water.\nStir gently to combine.\nGarnish with a mint sprig and/or lime wedge.\nServe immediately and enjoy your refreshing Mohito!"
+  },
+  {
+    "id": 14,
+    "name": "Negroni",
+    "recipe": "Fill a mixing glass or cocktail shaker with ice cubes.\nAdd gin, sweet vermouth, and Campari to the glass or shaker.\nStir the mixture well until thoroughly chilled.\nStrain the mixture into a rocks glass filled with ice cubes.\nGarnish with an orange twist.\nServe immediately and enjoy your classic Negroni!"
+  },
+  {
+    "id": 15,
+    "name": "Old Fashioned",
+    "recipe": "In an old fashioned glass, muddle the sugar cube with a few dashes of Angostura bitters (or add the simple syrup if using instead of a sugar cube).\nAdd a couple of ice cubes to the glass.\nPour the bourbon or rye whiskey over the ice.\nStir gently to combine and chill the drink.\nGarnish with an orange twist or cherry.\nServe immediately and enjoy your classic Old Fashioned!"
+  },
+  {
+    "id": 16,
+    "name": "Paloma",
+    "recipe": "Fill a highball glass with ice cubes.\nPour the tequila and freshly squeezed lime juice over the ice.\nAdd a pinch of salt.\nTop up with grapefruit soda.\nStir gently to combine.\nGarnish with a lime wedge.\nServe immediately and enjoy your refreshing Paloma!"
+  },
+  {
+    "id": 17,
+    "name": "Pina Colada",
+    "recipe": "In a blender, combine white rum, pineapple juice, and coconut cream.\nAdd a handful of ice cubes to the blender.\nBlend until smooth and creamy.\nPour the mixture into a chilled glass.\nGarnish with a pineapple wedge and/or maraschino cherry.\nServe immediately and enjoy your tropical Piña Colada!"
+  },
+  {
+    "id": 18,
+    "name": "Pornstar Martini",
+    "recipe": "Fill a cocktail shaker with ice cubes.\nAdd vanilla vodka, passion fruit liqueur, freshly squeezed lime juice, simple syrup, and passion fruit puree or juice to the shaker.\nShake well until the mixture is thoroughly chilled.\nStrain the mixture into a chilled martini glass.\nGarnish with half of a passion fruit floating on top.\nServe immediately with a shot of Champagne or Prosecco on the side (the \"pornstar\" part of the drink).\nEnjoy your delicious Pornstar Martini!"
+  },
+  {
+    "id": 19,
+    "name": "Tequila Sunrise",
+    "recipe": "Fill a highball glass with ice cubes.\nPour the tequila and orange juice into the glass.\nStir well to combine.\nSlowly pour the grenadine syrup over the back of a spoon or the edge of the glass, allowing it to sink to the bottom.\nGarnish with an orange slice and/or maraschino cherry.\nServe immediately and enjoy your vibrant Tequila Sunrise!"
+  },
+  {
+    "id": 20,
+    "name": "Tom Collins",
+    "recipe": "Fill a Collins glass with ice cubes.\nPour gin, freshly squeezed lemon juice, and simple syrup into the glass.\nStir well to combine.\nTop up with club soda.\nGarnish with a lemon slice and maraschino cherry.\nServe immediately and enjoy your refreshing Tom Collins!"
+  },
+  {
+    "id": 21,
+    "name": "Whiskey Sour",
+    "recipe": "Fill a cocktail shaker with ice cubes.\nAdd whiskey, freshly squeezed lemon juice, and simple syrup to the shaker.\nShake well until the mixture is thoroughly chilled.\nStrain the mixture into a rocks glass filled with ice cubes.\nGarnish with a lemon slice and/or cherry.\nServe immediately and enjoy your classic Whiskey Sour!"
+  }
+]
