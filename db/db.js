@@ -2,6 +2,7 @@ const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('.bar_assistant.db');
 const drinks = require('./data/drinks.json');
 const images = require('./data/images.json')
+const ingredients = require('./data/ingredients.json')
 
 db.run(`
     CREATE TABLE IF NOT EXISTS users
@@ -51,7 +52,7 @@ db.run(`
     )
 `)
 
-// sql for inserting multiple rows
+// DRINKS INSERT
 const sql = 'INSERT INTO drinks (id, name, recipe) VALUES ' +
     drinks.map(() => '(?, ?, ?)').join(', ');
 
@@ -60,7 +61,6 @@ const values = drinks.reduce((acc, drink) => {
     return acc;
 }, []);
 
-// insert array
 db.run(sql, values, function (err) {
     if (err) {
         return console.error(err.message);
@@ -68,6 +68,7 @@ db.run(sql, values, function (err) {
     console.log(`Rows inserted: ${this.changes}`);
 });
 
+// IMAGES INSERT
 const imagesSql = 'INSERT INTO images (id, drinkId, path) VALUES ' +
     images.map(() => '(?, ?, ?)').join(', ');
 
@@ -82,5 +83,24 @@ db.run(imagesSql, imagesValues, function (err) {
     }
     console.log(`Rows inserted: ${this.changes}`);
 })
+
+// INGREDIENTS INSERT
+// SQL for inserting multiple rows
+const ingredientsSql = 'INSERT INTO ingredients (id, name) VALUES ' +
+    ingredients.map(() => '(?, ?)').join(', ');
+
+// Flatten the array of values
+const ingredientsValues = ingredients.reduce((acc, ingredient) => {
+    acc.push(ingredient.id, ingredient.name);
+    return acc;
+}, []);
+
+// Insert array
+db.run(ingredientsSql, ingredientsValues, function (err) {
+    if (err) {
+        return console.error(err.message);
+    }
+    console.log(`Rows inserted: ${this.changes}`);
+});
 
 module.exports = db;
