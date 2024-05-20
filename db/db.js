@@ -1,6 +1,7 @@
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('.bar_assistant.db');
 const drinks = require('./data/drinks.json');
+const images = require('./data/images.json')
 
 db.run(`
     CREATE TABLE IF NOT EXISTS users
@@ -66,5 +67,20 @@ db.run(sql, values, function (err) {
     }
     console.log(`Rows inserted: ${this.changes}`);
 });
+
+const imagesSql = 'INSERT INTO images (id, drinkId, path) VALUES ' +
+    images.map(() => '(?, ?, ?)').join(', ');
+
+const imagesValues = images.reduce((acc, image) => {
+    acc.push(image.id, image.drinkId, image.path);
+    return acc;
+}, []);
+
+db.run(imagesSql, imagesValues, function (err) {
+    if (err) {
+        return console.error(err.message);
+    }
+    console.log(`Rows inserted: ${this.changes}`);
+})
 
 module.exports = db;

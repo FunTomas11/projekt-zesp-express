@@ -1,0 +1,23 @@
+[
+  { "id": 1, "drinkId": 1, "path": "/public/images/aperolSpritz.jpg" },
+  { "id": 2, "drinkId": 2, "path": "/public/images/bloodyMary.jpg" },
+  { "id": 3, "drinkId": 3, "path": "/public/images/blueLagoon.jpg" },
+  { "id": 4, "drinkId": 4, "path": "/public/images/cosmopolitan.jpg" },
+  { "id": 5, "drinkId": 5, "path": "/public/images/cubaLibre.jpg" },
+  { "id": 6, "drinkId": 6, "path": "/public/images/daiquiri.jpg" },
+  { "id": 7, "drinkId": 7, "path": "/public/images/ginTonic.jpg" },
+  { "id": 8, "drinkId": 8, "path": "/public/images/hugo.jpg" },
+  { "id": 9, "drinkId": 9, "path": "/public/images/longIslandIceTea.jpg" },
+  { "id": 10, "drinkId": 10, "path": "/public/images/maiTai.jpg" },
+  { "id": 11, "drinkId": 11, "path": "/public/images/margarita.jpg" },
+  { "id": 12, "drinkId": 12, "path": "/public/images/martini.jpg" },
+  { "id": 13, "drinkId": 13, "path": "/public/images/mohito.jpg" },
+  { "id": 14, "drinkId": 14, "path": "/public/images/negroni.jpg" },
+  { "id": 15, "drinkId": 15, "path": "/public/images/oldFashioned.jpg" },
+  { "id": 16, "drinkId": 16, "path": "/public/images/paloma.jpg" },
+  { "id": 17, "drinkId": 17, "path": "/public/images/pinaColada.jpg" },
+  { "id": 18, "drinkId": 18, "path": "/public/images/pornstarMartini.jpg" },
+  { "id": 19, "drinkId": 19, "path": "/public/images/tequilaSunrise.jpg" },
+  { "id": 20, "drinkId": 20, "path": "/public/images/tomCollins.jpg" },
+  { "id": 21, "drinkId": 21, "path": "/public/images/whiskeySour.jpg" }
+]
