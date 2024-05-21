@@ -1,18 +1,15 @@
-import { AfterViewChecked, Component, ElementRef, ViewChild } from '@angular/core';
-import { CommonModule } from "@angular/common";
-import { MatInputModule} from "@angular/material/input";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatButtonModule } from "@angular/material/button";
-import { FormsModule, ReactiveFormsModule} from "@angular/forms";
-import { MatCardModule, MatCardActions, MatCardHeader, MatCardContent } from '@angular/material/card';
-import { MatChipsModule } from '@angular/material/chips';
-import { ChatService } from './chat.service';
+import {AfterViewChecked, Component, ElementRef, ViewChild} from '@angular/core';
+import {CommonModule} from "@angular/common";
+import {MatInputModule} from "@angular/material/input";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatButtonModule} from "@angular/material/button";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {MatCardActions, MatCardContent, MatCardHeader, MatCardModule} from '@angular/material/card';
+import {MatChipsModule} from '@angular/material/chips';
+import {ChatService} from './chat.service';
 import {CdkScrollable} from "@angular/cdk/overlay";
+import {Message, Role} from "../../models/message.model";
 
-export interface Message {
-  role: string;
-  content: string;
-}
 
 @Component({
   selector: 'app-chat',
@@ -23,24 +20,8 @@ export interface Message {
   providers: [ChatService]
 })
 export class ChatComponent implements AfterViewChecked {
-  messages: Message[] = [
-    {
-      role: 'assistant',
-      content: 'Hi im bot'
-    },
-    {
-      role: 'user',
-      content: 'Hi'
-    },
-    {
-      role: 'assistant',
-      content: 'How are you'
-    },
-    {
-      role: 'user',
-      content: 'Thenk you'
-    },
-  ];
+  protected readonly Role = Role;
+  messages: Message[] = [];
 
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
 
@@ -55,10 +36,10 @@ export class ChatComponent implements AfterViewChecked {
   sendMessage(msg: string) {
     if (!msg) return;
 
-    this.messages.push({ role: 'user', content: msg });
+    this.messages.push({ role: Role.User, content: msg });
     this.chatService.sendMessage(msg).subscribe((response: any): void => {
       console.log('response', response);
-
     });
   }
+
 }
