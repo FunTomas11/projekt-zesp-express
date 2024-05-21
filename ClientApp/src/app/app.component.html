@@ -1,1 +1,7 @@
+<div class="header">
+  <h2>Bar Assistant</h2>
+  @if (isUserLoggedIn) {
+    <button mat-button color="primary" (click)="logout()">Logout</button>
+  }
+</div>
 <router-outlet></router-outlet>

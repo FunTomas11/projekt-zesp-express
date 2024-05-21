@@ -60,6 +60,7 @@ export class LoginService {
     sessionStorage.removeItem('token');
     this._token = null;
     this._router.navigate(['/login']).then(noop);
+    this._snack.open('Logged out', 'OK', {duration: 2000});
   }
 
 }
