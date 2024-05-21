@@ -1,27 +1,23 @@
 <div class="container">
-  <div class="header">
-    <h2>Bar Assistant</h2>
-</div>
-
-<div class="chat-container">
+  <div class="chat-container">
     <div class="chat-area" #scrollContainer>
       <ng-container *ngFor="let message of messages">
         <div [ngClass]="message.role === 'user' ? 'userMsg' : 'botMsg'">
-            <p class="content">{{ message.content }}</p>
-            <p class="role">
-              <span *ngIf="message.role === 'user'">💁🏻‍♀️</span>
-              <span *ngIf="message.role !== 'user'">🧚🏻‍♀️</span>
-            </p>
+          <p class="content">{{ message.content }}</p>
+          <p class="role">
+            <span *ngIf="message.role === 'user'">💁🏻‍♀️</span>
+            <span *ngIf="message.role !== 'user'">🧚🏻‍♀️</span>
+          </p>
         </div>
       </ng-container>
     </div>
 
-    <form 
+    <form
       class="input-form"
     >
       <input
         #messageInput
-        class="input" 
+        class="input"
         placeholder="Type your message..."
       >
       <button
