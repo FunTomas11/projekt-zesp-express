@@ -1,7 +1,7 @@
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 import {environment} from "../../../environments/environment.development";
-import {Observable, catchError, of, throwError} from "rxjs";
+import {Observable, catchError, throwError} from "rxjs";
 
 @Injectable()
 export class ChatService {
@@ -19,17 +19,7 @@ export class ChatService {
   }
 
   public sendMessage(message: string): Observable<any> {
-    const sessionId = '424c9d01-255d-4420-a5f9-56ad2ecde3a4';
-
-    return this.httpClient.post(
-      `${environment.apiUrl}/chat`,
-      {message},
-    ).pipe(
-      catchError((error: any) => {
-        console.log('dupa1', error);
-
-        return of('');
-      })
-    );
+    return this.httpClient.post(`${environment.apiUrl}/chat`, {message},)
+      .pipe(catchError(this.handleError));
   }
 }
