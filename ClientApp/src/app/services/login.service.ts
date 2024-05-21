@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import {User} from "../models/user.model";
 import {HttpClient} from "@angular/common/http";
-import {noop, Observable, tap} from "rxjs";
+import {catchError, noop, Observable, tap} from "rxjs";
 import {Router} from "@angular/router";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,7 @@ export class LoginService {
     this._token = token;
   }
 
-  constructor(private _http: HttpClient, private _router: Router ) {
+  constructor(private _http: HttpClient, private _router: Router, private _snack: MatSnackBar ) {
     this._token = sessionStorage.getItem('token');
     if (this._token) {
       this._router.navigate(['/chat']).then(noop);
@@ -33,7 +34,12 @@ export class LoginService {
       .pipe(
         tap(res => this.token = res.sessionId),
         tap(() => this._router.navigate(['/chat']).then(noop)),
+        tap(() => this._snack.open('Logged in', 'OK', {duration: 2000})),
+        catchError(err => {
 
+          this._snack.open('Unable to login: ' + err.error.error, 'OK', {duration: 2000});
+          throw err;
+        })
       );
   }
 
@@ -41,7 +47,12 @@ export class LoginService {
     return this._http.post<any>(`${this._userUrl}/register`, user)
       .pipe(
         tap(res => this.token = res.sessionId),
-        tap(() => this._router.navigate(['/chat']).then(noop))
+        tap(() => this._router.navigate(['/chat']).then(noop)),
+        tap(() => this._snack.open('Registered and logged in', 'OK', {duration: 2000})),
+        catchError(err => {
+          this._snack.open('Unable to register: ' + err.error.error, 'OK', {duration: 2000});
+          throw err;
+        })
         );
   }
 
