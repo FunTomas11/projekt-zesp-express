@@ -3,10 +3,11 @@ import { CommonModule } from "@angular/common";
 import { MatInputModule} from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatButtonModule } from "@angular/material/button";
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
+import { FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { MatCardModule, MatCardActions, MatCardHeader, MatCardContent } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { ChatService } from './chat.service';
+import {CdkScrollable} from "@angular/cdk/overlay";
 
 export interface Message {
   role: string;
@@ -16,7 +17,7 @@ export interface Message {
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [ CommonModule, FormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, MatChipsModule, MatCardActions, MatCardActions, MatCardContent, MatCardModule, MatCardHeader ],
+  imports: [CommonModule, FormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, MatChipsModule, MatCardActions, MatCardActions, MatCardContent, MatCardModule, MatCardHeader, CdkScrollable],
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
   providers: [ChatService]
@@ -53,11 +54,11 @@ export class ChatComponent implements AfterViewChecked {
 
   sendMessage(msg: string) {
     if (!msg) return;
-    
+
     this.messages.push({ role: 'user', content: msg });
     this.chatService.sendMessage(msg).subscribe((response: any): void => {
       console.log('response', response);
-      
+
     });
   }
 }
