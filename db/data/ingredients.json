@@ -50,5 +50,6 @@
   { "id": 49, "name": "Passion fruit puree or juice" },
   { "id": 50, "name": "Salt" },
   { "id": 51, "name": "Sugar cube" },
-  { "id": 52, "name": "Worcestershire sauce" }
+  { "id": 52, "name": "Worcestershire sauce" },
+  { "id": 53, "name": "Ice cubes"}
 ]
