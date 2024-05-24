@@ -9,6 +9,7 @@ import {MatChipsModule} from '@angular/material/chips';
 import {ChatService} from './chat.service';
 import {CdkScrollable} from "@angular/cdk/overlay";
 import {Message, Role} from "../../models/message.model";
+import {DrinkCardComponent} from "../drink-card/drink-card.component";
 
 
 @Component({
@@ -23,7 +24,9 @@ import {Message, Role} from "../../models/message.model";
     ReactiveFormsModule,
     MatChipsModule,
     MatCardModule,
-    CdkScrollable],
+    CdkScrollable,
+    DrinkCardComponent
+  ],
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
   providers: [ChatService]

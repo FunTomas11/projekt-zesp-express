@@ -4,6 +4,7 @@
       @for (message of messages; track message) {
         <div [ngClass]="message.role === 'user' ? 'userMsg' : 'botMsg'">
           <p class="content">{{ message.content }}</p>
+<!--          <app-drink-card [drink]="mock" />-->
           <p class="role">
             @switch (message.role) {
               @case (Role.User) {
