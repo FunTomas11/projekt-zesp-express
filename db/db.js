@@ -125,7 +125,6 @@ db.run(drinkIngredientsSql, drinkIngredientsValues, function (err) {
     if (err) {
         return console.error(err.message);
     }
-    console.log(`Rows inserted: ${this.changes}`);
 });
 
 

@@ -3,6 +3,7 @@ var router = express.Router();
 
 const { randomUUID } = require('crypto');
 const { Ollama } = require('ollama');
+const {modifyResponse} = require("../public/javascripts/responseModifier");
 
 const conversations = {};
 
@@ -26,10 +27,13 @@ router.post('/chat', async (req, res) => {
         messages: conversationHistory,
     });
 
+    console.log(response.message.content)
+    const modifiedResponse = modifyResponse(response.message.content);
+
     conversationHistory.push({ role: 'assistant', content: response.message.content });
     conversations[sessionId] = conversationHistory;
 
-    res.json({ response: response.message.content });
+    res.json({ response: modifiedResponse });
 
     console.log(sessionId);
     console.log(conversations[sessionId]);
