@@ -36,7 +36,6 @@ export class LoginService {
         tap(() => this._router.navigate(['/chat']).then(noop)),
         tap(() => this._snack.open('Logged in', 'OK', {duration: 2000})),
         catchError(err => {
-
           this._snack.open('Unable to login: ' + err.error.error, 'OK', {duration: 2000});
           throw err;
         })

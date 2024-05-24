@@ -1,0 +1,19 @@
+<mat-card class="drink-card">
+  <mat-card-header class="drink-card__header">
+    <mat-card-title>{{ drink.name }}</mat-card-title>
+  </mat-card-header>
+  <div class="drink-card__subtitle">
+    <img class="drink-card__image" mat-card-image [ngSrc]="drink.image" alt="Drink image" width="200" height="400"/>
+    <div class="drink-card__ingredients">
+      <h3>Ingredients: </h3>
+      <ul class="drink-card__ingredients-list">
+        @for (ingredient of drink.ingredients; track drink) {
+          <li>- {{ ingredient }}</li>
+        }
+      </ul>
+    </div>
+  </div>
+  <mat-card-content class="drink-card__content">
+    <p>{{ drink.description }}</p>
+  </mat-card-content>
+</mat-card>
