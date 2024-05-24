@@ -103,13 +103,24 @@ db.run(ingredientsSql, ingredientsValues, function (err) {
 });
 
 // DRINK INGREDIENTS INSERT
-const drinkIngredientsSql = 'INSERT INTO drink_ingredients (drinkId, ingredientId, quantity) VALUES ' +
-    drinkIngredients.map(() => '(?, ?, ?)').join(', ');
+function removeDuplicates(ingredients) {
+    const seen = new Set();
+    return ingredients.filter(item => {
+        const key = `${item.drinkId}-${item.ingredientId}`;
+        return seen.has(key) ? false : seen.add(key);
+    });
+}
 
-const drinkIngredientsValues = drinkIngredients.reduce((acc, drinkIngredient) => {
+const uniqueDrinkIngredients = removeDuplicates(drinkIngredients);
+
+const drinkIngredientsSql = 'INSERT INTO drink_ingredients (drinkId, ingredientId, quantity) VALUES ' +
+    uniqueDrinkIngredients.map(() => '(?, ?, ?)').join(', ');
+
+const drinkIngredientsValues = uniqueDrinkIngredients.reduce((acc, drinkIngredient) => {
     acc.push(drinkIngredient.drinkId, drinkIngredient.ingredientId, drinkIngredient.quantity);
     return acc;
 }, []);
+
 db.run(drinkIngredientsSql, drinkIngredientsValues, function (err) {
     if (err) {
         return console.error(err.message);
