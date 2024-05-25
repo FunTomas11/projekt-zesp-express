@@ -10,46 +10,36 @@ const conversations = {};
 
 function formatPrompt(availableDrinks, availableIngredients, userMessage) {
   return `You are an expert mixologist. Your primary goal is to help users discover and create delicious beverages.
+Guidelines:
+If the user asks about topics unrelated to drinks, politely acknowledge their comment and gently steer the conversation back to mixology.  
+Based on the user's input and the provided lists of available drinks and ingredients try to provide helpful suggestions.
+At the end generate a drink recommendation in the following JSON format:
+\`\`\`json
+{"id": "<Drink ID>","name": "<Drink Name>","ingredients": ["<Ingredient 1>", "<Ingredient 2>", ...],"recipe": "<Detailed step-by-step instructions on how to prepare>"}
+\`\`\`
 
-**Guidelines:**
-   * If the user asks about topics unrelated to drinks, politely acknowledge their comment and gently steer the conversation back to mixology.  
-   * Based on the user's input and the provided lists of available drinks and ingredients try to provide helpful suggestions.
-   * At the end generate a drink recommendation in the following JSON format:
-   \`\`\`json
-   {
-       "id": "<Drink ID>",
-       "name": "<Drink Name>",
-       "ingredients": ["<Ingredient 1>", "<Ingredient 2>", ...],
-       "recipe": "<Detailed step-by-step instructions on how to prepare>"
-   }
-   \`\`\`
-  
-   Available drinks:
-   ${availableDrinks}
+Available drinks:
+${availableDrinks}
 
-   Available ingredients:
-   ${availableIngredients}
+Available ingredients:
+${availableIngredients}
 
-   User input:
-   ${userMessage}
+User input:
+${userMessage}
 
-   Answer:`;
+Answer:`;
 }
 
 function formatSubPrompt(userMessage) {
-  return `Answer based on the provided conversation history. Your answer should consist of two parts. First write a short summary of the request and at the end generate a single drink recommendation in the following JSON format:
-  \`\`\`json
-  {
-      "id": "<Drink ID>",
-      "name": "<Drink Name>",
-      "ingredients": ["<Ingredient 1>", "<Ingredient 2>", ...],
-      "recipe": "<Detailed step-by-step instructions on how to prepare>"
-  }
+  return `User input:
+${userMessage}
 
-  User input:
-  ${userMessage}
+First write a human-like answer and then generate a single drink recommendation. Always format the recommendation in the following JSON format:
+\`\`\`json
+{"id": "<Drink ID>","name": "<Drink Name>","ingredients": ["<Ingredient 1>", "<Ingredient 2>", ...],"recipe": "<Detailed step-by-step instructions on how to prepare>"}
+\`\`\`
 
-  Answer:`;
+Answer:`;
 }
 
 function getDrinksImg(drinkId) {
@@ -64,7 +54,6 @@ function getDrinksImg(drinkId) {
           path: row.path,
         }));
 
-        console.log(images);
         let img = ''
         if (images.length > 0) {
           img = images[0].path
@@ -135,11 +124,10 @@ router.post('/chat', async (req, res) => {
 
   try {
     const response = await ollama.chat({
-        model: 'gemma:2b',
+        model: 'llama3',
         messages: conversationHistory,
     });
 
-    console.log(response.message.content)
     const modifiedResponse = modifyResponse(response.message.content);
 
     let jsonResp = null
