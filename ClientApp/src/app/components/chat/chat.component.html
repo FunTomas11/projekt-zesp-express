@@ -4,7 +4,7 @@
       @for (message of messages; track message) {
         <div [ngClass]="message.role === 'user' ? 'userMsg' : 'botMsg'">
           <p markdown class="content">{{ message.content }}</p>
-<!--          <app-drink-card [drink]="mock" />-->
+          <!--          <app-drink-card [drink]="mock" />-->
           <p class="role">
             @switch (message.role) {
               @case (Role.User) {
@@ -18,6 +18,14 @@
         </div>
       } @empty {
         <p class="flex items-center justify-center">Start typing to show something here...</p>
+      }
+      @if (loading) {
+        <div class="botMsg">
+          <p class="loader"></p>
+          <p class="role">
+            <span>🧚🏻‍♀️</span>
+          </p>
+        </div>
       }
     </div>
 

@@ -11,6 +11,7 @@ import {CdkScrollable} from "@angular/cdk/overlay";
 import {Message, Role} from "../../models/message.model";
 import {DrinkCardComponent} from "../drink-card/drink-card.component";
 import {MarkdownComponent, provideMarkdown} from "ngx-markdown";
+import {catchError} from "rxjs";
 
 
 @Component({
@@ -36,6 +37,7 @@ import {MarkdownComponent, provideMarkdown} from "ngx-markdown";
 export class ChatComponent implements AfterViewChecked {
   protected readonly Role = Role;
   messages: Message[] = [];
+  loading: boolean = false;
 
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
 
@@ -53,9 +55,15 @@ export class ChatComponent implements AfterViewChecked {
     if (!msg) return;
 
     this.messages.push({role: Role.User, content: msg});
-    this.chatService.sendMessage(msg).subscribe((response: any): void => {
-      this.messages.push({role: Role.Assistant, content: response.response});
-    });
+    this.loading = true;
+    this.chatService.sendMessage(msg)
+      .pipe(catchError((error: any) => {
+        this.loading = false;
+        return error;
+      }))
+      .subscribe((response: any): void => {
+        this.messages.push({role: Role.Assistant, content: response.response});
+        this.loading = false;
+      });
   }
-
 }
