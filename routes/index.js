@@ -68,7 +68,7 @@ function getDrinksImg(drinkId) {
         console.log(images);
         let img = ''
         if (images.length > 0) {
-          img = JSON.stringify(images[0].path)
+          img = images[0].path
         } 
         resolve(img);
       }
