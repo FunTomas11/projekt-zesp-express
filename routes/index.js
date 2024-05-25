@@ -21,9 +21,6 @@ At the end generate a drink recommendation in the following JSON format:
 Available drinks:
 ${availableDrinks}
 
-Available ingredients:
-${availableIngredients}
-
 User input:
 ${userMessage}
 
@@ -115,18 +112,39 @@ function getDrinksIngredients(drinkId) {
 
 function getDrinks() {
   return new Promise((resolve, reject) => {
-    const sql = 'SELECT * FROM drinks';
-
-    db.all(sql, [], (err, rows) => {
+    const drinksSql = 'SELECT * FROM drinks';
+    
+    db.all(drinksSql, [], (err, drinkRows) => {
       if (err) {
-        reject(err);
-      } else {
-        const drinks = rows.map(row => ({
-          id: row.id,
-          name: row.name
-        }));
-        resolve(JSON.stringify(drinks));
+        return reject(err);
       }
+
+      const drinks = {};
+
+      const ingredientPromises = drinkRows.map(drink => {
+        return new Promise((resolve, reject) => {
+          const ingredientsSql = `
+            SELECT ingredients.name 
+            FROM drink_ingredients
+            LEFT JOIN ingredients ON drink_ingredients.ingredientId = ingredients.id
+            WHERE drink_ingredients.drinkId = ?
+          `;
+
+          db.all(ingredientsSql, [drink.id], (err, ingredientRows) => {
+            if (err) {
+              return reject(err);
+            }
+
+            const ingredientNames = ingredientRows.map(row => row.name);
+            drinks[drink.name] = ingredientNames;
+            resolve();
+          });
+        });
+      });
+
+      Promise.all(ingredientPromises)
+        .then(() => resolve(drinks))
+        .catch(err => reject(err));
     });
   });
 }
@@ -163,9 +181,9 @@ router.post('/chat', async (req, res) => {
   let conversationHistory = conversations[sessionId] || [];
 
   if (conversationHistory.length <= 0) {
-    const availableIngredients = await getIngredients();
+    // const availableIngredients = await getIngredients();
     const availableDrinks = await getDrinks();
-    const formattedPrompt = formatPrompt(availableDrinks, availableIngredients, userMessage);
+    const formattedPrompt = formatPrompt(availableDrinks, userMessage);
     conversationHistory.push({ role: 'user', content: formattedPrompt });
   } else {
     const formattedSubPrompt = formatSubPrompt(userMessage);
