@@ -15,7 +15,7 @@ If the user asks about topics unrelated to drinks, politely acknowledge their co
 Based on the user's input and the provided lists of available drinks and ingredients try to provide helpful suggestions.
 At the end generate a drink recommendation in the following JSON format:
 \`\`\`json
-{"id":"drinkId","name":"drinkName","ingredients": ["ingredient1", "ingredient2" ... all ingredients for given drink (use drinkId)],"recipe": "Drink recipe"}
+{"id":"drinkId","name":"drinkName","ingredients": ["ingredient1", "ingredient2" ... all ingredients for given drink]}
 \`\`\`
 
 Available drinks:
@@ -36,7 +36,7 @@ ${userMessage}
 
 Generate a single drink recommendation. Always format the recommendation as JSON in the following format:
 \`\`\`json
-{"id":"drinkId","name":"drinkName","ingredients": ["ingredient1", "ingredient2" ... all ingredients for given drink (use drinkId)],"recipe": "Drink recipe"}
+{"id":"drinkId","name":"drinkName","ingredients": ["ingredient1", "ingredient2" ... all ingredients for given drink]}
 \`\`\`
 
 Answer:\`\`\`json`;
@@ -64,6 +64,28 @@ function getDrinksImg(drinkId) {
   });
 }
 
+function getDrinksRecipe(drinkId) {
+  return new Promise((resolve, reject) => {
+    const sql = 'SELECT * FROM drinks WHERE id = ?';
+
+    db.all(sql, [drinkId], (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        const drinks = rows.map(row => ({
+          recipe: row.recipe,
+        }));
+
+        let recipe = ''
+        if (drinks.length > 0) {
+          recipe = drinks[0].recipe
+        } 
+        resolve(recipe);
+      }
+    });
+  });
+}
+
 function getDrinks() {
   return new Promise((resolve, reject) => {
     const sql = 'SELECT * FROM drinks';
@@ -74,8 +96,7 @@ function getDrinks() {
       } else {
         const drinks = rows.map(row => ({
           id: row.id,
-          name: row.name,
-          recipe: row.recipe
+          name: row.name
         }));
         resolve(JSON.stringify(drinks));
       }
@@ -135,11 +156,11 @@ router.post('/chat', async (req, res) => {
     let jsonResp = null
     if (modifiedResponse.json !== null) {
       imagePath = await getDrinksImg(modifiedResponse.json.id);
-
+      recipe = await getDrinksImg(modifiedResponse.json.id);
       jsonResp = {
         name: modifiedResponse.json.name,
         ingredients: modifiedResponse.json.ingredients,
-        description: modifiedResponse.json.recipe,
+        description: recipe,
         image: imagePath
       };
     }
