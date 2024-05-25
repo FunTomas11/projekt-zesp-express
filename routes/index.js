@@ -142,14 +142,18 @@ router.post('/chat', async (req, res) => {
 
     console.log(response.message.content)
     const modifiedResponse = modifyResponse(response.message.content);
-    imagePath = await getDrinksImg(modifiedResponse.json.id);
 
-    const jsonResp = {
-      name: modifiedResponse.json.name,
-      ingredients: modifiedResponse.json.ingredients,
-      description: modifiedResponse.json.recipe,
-      image: imagePath
-    };
+    let jsonResp = null
+    if (modifiedResponse.json !== null) {
+      imagePath = await getDrinksImg(modifiedResponse.json.id);
+
+      jsonResp = {
+        name: modifiedResponse.json.name,
+        ingredients: modifiedResponse.json.ingredients,
+        description: modifiedResponse.json.recipe,
+        image: imagePath
+      };
+    }
 
     const formattedResponse = {
       msg: modifiedResponse.msg,
