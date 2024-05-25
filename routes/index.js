@@ -37,7 +37,7 @@ function formatPrompt(availableDrinks, availableIngredients, userMessage) {
 }
 
 function formatSubPrompt(userMessage) {
-  return `Write a short summary of user's request and generate a single drink recommendation in the following JSON format:
+  return `Write a short summary of the user request and generate a single drink recommendation in the following JSON format:
   \`\`\`json
   {
       "id": "<Drink ID>",
