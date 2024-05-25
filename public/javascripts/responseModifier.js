@@ -17,21 +17,25 @@ function modifyResponse(content) {
             jsonString = jsonString.replace(suffixPattern, '').trim();
         }
 
+        console.log(jsonString);
+
+        let err = null;
+        let parsedJson = null;
         try {
-            const parsedJson = JSON.parse(jsonString);
-            const result = {
-                msg: naturalLanguagePart.trim(),
-                json: parsedJson
-            };
-            return result;
+            parsedJson = JSON.parse(jsonString);
         } catch (error) {
+            err = error
             console.error('Failed to parse JSON:', error);
-            return {
-                msg: jsonString.trim(),
-                json: null
-            };
         }
+
+        const result = {
+            msg: naturalLanguagePart != '' ? naturalLanguagePart.trim() : err ? jsonString : '',
+            json: parsedJson
+        };
+
+        return result;
     }
+
     console.error('Expected a string but got:', typeof content);
     return content;
 }

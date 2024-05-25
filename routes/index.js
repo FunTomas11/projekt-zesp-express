@@ -15,7 +15,7 @@ If the user asks about topics unrelated to drinks, politely acknowledge their co
 Based on the user's input and the provided lists of available drinks and ingredients try to provide helpful suggestions.
 At the end generate a drink recommendation in the following JSON format:
 \`\`\`json
-{"id": "<Drink ID>","name": "<Drink Name>","ingredients": ["<Ingredient 1>", "<Ingredient 2>", ...],"recipe": "<Detailed step-by-step instructions on how to prepare>"}
+{"id":"drinkId","name":"drinkName","ingredients": ["ingredient1", "ingredient2"],"recipe": "Detailed step-by-step instructions on how to prepare"}
 \`\`\`
 
 Available drinks:
@@ -34,12 +34,12 @@ function formatSubPrompt(userMessage) {
   return `User input:
 ${userMessage}
 
-First write a human-like answer and then generate a single drink recommendation. Always format the recommendation in the following JSON format:
+Generate a single drink recommendation. Always format the recommendation as JSON in the following format:
 \`\`\`json
-{"id": "<Drink ID>","name": "<Drink Name>","ingredients": ["<Ingredient 1>", "<Ingredient 2>", ...],"recipe": "<Detailed step-by-step instructions on how to prepare>"}
+{"id":"drinkId","name":"drinkName","ingredients": ["ingredient1", "ingredient2"],"recipe": "Detailed step-by-step instructions on how to prepare"}
 \`\`\`
 
-Answer:`;
+Answer:\`\`\`json`;
 }
 
 function getDrinksImg(drinkId) {
@@ -124,7 +124,7 @@ router.post('/chat', async (req, res) => {
 
   try {
     const response = await ollama.chat({
-        model: 'llama3',
+        model: 'gemma:2b',
         messages: conversationHistory,
     });
 
