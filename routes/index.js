@@ -13,7 +13,8 @@ function formatPrompt(availableDrinks, availableIngredients, userMessage) {
 
 **Guidelines:**
    * If the user asks about topics unrelated to drinks, politely acknowledge their comment and gently steer the conversation back to mixology.  
-   * Based on the user's input and the provided lists of available drinks and ingredients, generate a drink recommendation in the following JSON format:
+   * Based on the user's input and the provided lists of available drinks and ingredients try to provide helpful suggestions.
+   * At the end generate a drink recommendation in the following JSON format:
    \`\`\`json
    {
        "id": "<Drink ID>",
@@ -32,12 +33,11 @@ function formatPrompt(availableDrinks, availableIngredients, userMessage) {
    User input:
    ${userMessage}
 
-   Answer:
-   \`\`\`json`;
+   Answer:`;
 }
 
 function formatSubPrompt(userMessage) {
-  return `Generate a single drink recommendation in the following JSON format:
+  return `Write a short summary of user's request and generate a single drink recommendation in the following JSON format:
   \`\`\`json
   {
       "id": "<Drink ID>",
