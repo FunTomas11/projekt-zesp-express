@@ -15,7 +15,7 @@ If the user asks about topics unrelated to drinks, politely acknowledge their co
 Based on the user's input and the provided lists of available drinks and ingredients try to provide helpful suggestions.
 At the end generate a drink recommendation in the following JSON format:
 \`\`\`json
-{"id":"drinkId","name":"drinkName","ingredients": ["ingredient1", "ingredient2"],"recipe": "Detailed step-by-step instructions on how to prepare"}
+{"id":"drinkId","name":"drinkName","ingredients": ["ingredient1", "ingredient2" ... all ingredients for given drink (use drinkId)],"recipe": "Drink recipe"}
 \`\`\`
 
 Available drinks:
@@ -36,7 +36,7 @@ ${userMessage}
 
 Generate a single drink recommendation. Always format the recommendation as JSON in the following format:
 \`\`\`json
-{"id":"drinkId","name":"drinkName","ingredients": ["ingredient1", "ingredient2"],"recipe": "Detailed step-by-step instructions on how to prepare"}
+{"id":"drinkId","name":"drinkName","ingredients": ["ingredient1", "ingredient2" ... all ingredients for given drink (use drinkId)],"recipe": "Drink recipe"}
 \`\`\`
 
 Answer:\`\`\`json`;
@@ -75,6 +75,7 @@ function getDrinks() {
         const drinks = rows.map(row => ({
           id: row.id,
           name: row.name,
+          recipe: row.recipe
         }));
         resolve(JSON.stringify(drinks));
       }
@@ -91,6 +92,7 @@ function getIngredients() {
         reject(err);
       } else {
         const ingredients = rows.map(row => ({
+          drinkId: row.drinkId,
           name: row.name,
         }));
         resolve(JSON.stringify(ingredients));
