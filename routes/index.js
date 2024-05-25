@@ -13,22 +13,15 @@ function formatPrompt(availableDrinks, availableIngredients, userMessage) {
 
 **Guidelines:**
    * If the user asks about topics unrelated to drinks, politely acknowledge their comment and gently steer the conversation back to mixology.  
-   * Based on the user's input and the provided lists of available drinks and ingredients, generate a list of drink recommendations in the following JSON format:
+   * Based on the user's input and the provided lists of available drinks and ingredients, generate a drink recommendation in the following JSON format:
    \`\`\`json
    {
+       "id": "<Drink ID>",
        "name": "<Drink Name>",
        "ingredients": ["<Ingredient 1>", "<Ingredient 2>", ...],
-       "recipe": "<Clear, step-by-step instructions>"
+       "recipe": "<Detailed step-by-step instructions on how to prepare>"
    }
    \`\`\`
-   * Aim for 2-3 diverse suggestions per response, showcasing a variety of options.
-
-**Conversation Flow:**
-   * **Greeting:** Start with a warm welcome, e.g., "Welcome to the virtual bar! What kind of drink are you craving tonight?"
-   * **Questions:** Ask open-ended questions to narrow down the user's preferences, e.g., "Do you have a particular spirit in mind?" or "Are you in the mood for something refreshing or warming?"
-   * **Steering:** If the conversation drifts, use phrases like "That sounds interesting! Now, back to your drink..." or "While that's fascinating, let's focus on finding the perfect cocktail for you."
-   * **Presentation:** Present the suggestions with enthusiasm, highlighting unique aspects of each drink, e.g., "This classic cocktail is a perfect balance of sweet and sour." 
-   * **Follow-up:**  Encourage feedback and offer additional suggestions if the user is not satisfied.
   
    Available drinks:
    ${availableDrinks}
@@ -39,7 +32,48 @@ function formatPrompt(availableDrinks, availableIngredients, userMessage) {
    User input:
    ${userMessage}
 
-   Answer:`;
+   Answer:
+   \`\`\`json`;
+}
+
+function formatSubPrompt(userMessage) {
+  return `Generate a single drink recommendation in the following JSON format:
+  \`\`\`json
+  {
+      "id": "<Drink ID>",
+      "name": "<Drink Name>",
+      "ingredients": ["<Ingredient 1>", "<Ingredient 2>", ...],
+      "recipe": "<Detailed step-by-step instructions on how to prepare>"
+  }
+
+  User input:
+  ${userMessage}
+
+  Answer:
+  \`\`\`json`;
+}
+
+function getDrinksImg(drinkId) {
+  return new Promise((resolve, reject) => {
+    const sql = 'SELECT * FROM images WHERE drinkId = ?';
+
+    db.all(sql, [drinkId], (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        const images = rows.map(row => ({
+          path: row.path,
+        }));
+
+        console.log(images);
+        let img = ''
+        if (images.length > 0) {
+          img = JSON.stringify(images[0].path)
+        } 
+        resolve(img);
+      }
+    });
+  });
 }
 
 function getDrinks() {
@@ -53,7 +87,6 @@ function getDrinks() {
         const drinks = rows.map(row => ({
           id: row.id,
           name: row.name,
-          // recipe: row.recipe,
         }));
         resolve(JSON.stringify(drinks));
       }
@@ -70,7 +103,6 @@ function getIngredients() {
         reject(err);
       } else {
         const ingredients = rows.map(row => ({
-          // id: row.id,
           name: row.name,
         }));
         resolve(JSON.stringify(ingredients));
@@ -98,7 +130,8 @@ router.post('/chat', async (req, res) => {
     const formattedPrompt = formatPrompt(availableDrinks, availableIngredients, userMessage);
     conversationHistory.push({ role: 'user', content: formattedPrompt });
   } else {
-    conversationHistory.push({ role: 'user', content: userMessage });
+    const formattedSubPrompt = formatSubPrompt(userMessage);
+    conversationHistory.push({ role: 'user', content: formattedSubPrompt });
   }
 
   try {
@@ -109,11 +142,24 @@ router.post('/chat', async (req, res) => {
 
     console.log(response.message.content)
     const modifiedResponse = modifyResponse(response.message.content);
+    imagePath = await getDrinksImg(modifiedResponse.json.id);
+
+    const jsonResp = {
+      name: modifiedResponse.json.name,
+      ingredients: modifiedResponse.json.ingredients,
+      description: modifiedResponse.json.recipe,
+      image: imagePath
+    };
+
+    const formattedResponse = {
+      msg: modifiedResponse.msg,
+      json: jsonResp
+    }
 
     conversationHistory.push({ role: 'assistant', content: response.message.content });
     conversations[sessionId] = conversationHistory;
 
-    res.json({ response: modifiedResponse });
+    res.json({ response: formattedResponse });
 
     console.log(sessionId);
     console.log(conversations[sessionId]);
