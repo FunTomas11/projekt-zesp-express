@@ -88,7 +88,12 @@ function getDrinksRecipe(drinkId) {
 
 function getDrinksIngredients(drinkId) {
   return new Promise((resolve, reject) => {
-    const sql = 'SELECT * FROM drink_ingredients WHERE drinkId = ?';
+    const sql = `
+    SELECT ingredients.name 
+    FROM drink_ingredients
+    LEFT JOIN ingredients ON drink_ingredients.ingredientId = ingredients.id
+    WHERE drink_ingredients.drinkId = ?
+    `;
 
     db.all(sql, [drinkId], (err, rows) => {
       if (err) {
