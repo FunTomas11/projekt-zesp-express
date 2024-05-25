@@ -12,10 +12,10 @@ function formatPrompt(availableDrinks, availableIngredients, userMessage) {
   return `You are an expert mixologist. Your primary goal is to help users discover and create delicious beverages.
 Guidelines:
 If the user asks about topics unrelated to drinks, politely acknowledge their comment and gently steer the conversation back to mixology.  
-Based on the user's input and the provided lists of available drinks and ingredients try to provide helpful suggestions.
+Based on the user's input and the provided lists of available drinks try to provide helpful suggestions.
 At the end generate a drink recommendation in the following JSON format:
 \`\`\`json
-{"id":"drinkId","name":"drinkName","ingredients": ["ingredient1", "ingredient2" ... all ingredients for given drink]}
+{"id":"drinkId","name":"drinkName"}
 \`\`\`
 
 Available drinks:
@@ -36,7 +36,7 @@ ${userMessage}
 
 Generate a single drink recommendation. Always format the recommendation as JSON in the following format:
 \`\`\`json
-{"id":"drinkId","name":"drinkName","ingredients": ["ingredient1", "ingredient2" ... all ingredients for given drink]}
+{"id":"drinkId","name":"drinkName"}
 \`\`\`
 
 Answer:\`\`\`json`;
@@ -81,6 +81,28 @@ function getDrinksRecipe(drinkId) {
           recipe = drinks[0].recipe
         } 
         resolve(recipe);
+      }
+    });
+  });
+}
+
+function getDrinksIngredients(drinkId) {
+  return new Promise((resolve, reject) => {
+    const sql = 'SELECT * FROM ingredients WHERE drinkId = ?';
+
+    db.all(sql, [drinkId], (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        const ingredients = rows.map(row => ({
+          name: row.name,
+        }));
+
+        let names = [];
+        if (ingredients.length > 0) {
+          names = ingredients.map((ingredient) => ingredient.name);
+        } 
+        resolve(names);
       }
     });
   });
@@ -155,11 +177,13 @@ router.post('/chat', async (req, res) => {
 
     let jsonResp = null
     if (modifiedResponse.json !== null) {
-      imagePath = await getDrinksImg(modifiedResponse.json.id);
-      recipe = await getDrinksImg(modifiedResponse.json.id);
+      let imagePath = await getDrinksImg(modifiedResponse.json.id);
+      let recipe = await getDrinksRecipe(modifiedResponse.json.id);
+      let ingredients = await getDrinksIngredients(modifiedResponse.json.id);
+
       jsonResp = {
         name: modifiedResponse.json.name,
-        ingredients: modifiedResponse.json.ingredients,
+        ingredients: ingredients,
         description: recipe,
         image: imagePath
       };
