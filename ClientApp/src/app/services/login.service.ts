@@ -4,13 +4,14 @@ import {HttpClient} from "@angular/common/http";
 import {catchError, noop, Observable, tap} from "rxjs";
 import {Router} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {environment} from "../../environments/environment.development";
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
   private _token: string | null;
-  private _apiUrl = 'http://localhost:3000';
+  private _apiUrl = environment.apiUrl;
   private _userUrl = `${this._apiUrl}/users`;
 
   get isUserLoggedIn(): boolean {

@@ -10,6 +10,7 @@ import {ChatService} from './chat.service';
 import {CdkScrollable} from "@angular/cdk/overlay";
 import {Message, Role} from "../../models/message.model";
 import {DrinkCardComponent} from "../drink-card/drink-card.component";
+import {MarkdownComponent, provideMarkdown} from "ngx-markdown";
 
 
 @Component({
@@ -25,11 +26,12 @@ import {DrinkCardComponent} from "../drink-card/drink-card.component";
     MatChipsModule,
     MatCardModule,
     CdkScrollable,
-    DrinkCardComponent
+    DrinkCardComponent,
+    MarkdownComponent
   ],
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
-  providers: [ChatService]
+  providers: [ChatService, provideMarkdown()]
 })
 export class ChatComponent implements AfterViewChecked {
   protected readonly Role = Role;
