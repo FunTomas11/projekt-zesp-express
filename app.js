@@ -12,6 +12,8 @@ var app = express();
 app.use(cors());
 indexRouter.use(cors());
 
+app.use('/public', express.static(path.join(__dirname, 'public')));
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');

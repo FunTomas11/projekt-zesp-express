@@ -1,14 +1,22 @@
 .drink-card {
   max-width: 400px;
   color: #1f2029;
+  margin: 20px; /* Centering the drink card */
+  background-color: ghostwhite;
+  box-shadow: 0 0 24px 0 rgba(30, 13, 30, .3);
+  border-radius: 16px;
+  padding: 12px;
 
   &__header {
+    text-align: center; /* Centering the header text */
   }
 
   &__subtitle {
     display: flex;
     flex-wrap: wrap;
     margin-top: 12px;
+    justify-content: center;
+    align-items: center;
   }
 
   &__ingredients-list {
@@ -27,10 +35,11 @@
 
   &__image {
     border-radius: 8px !important;
-    margin-left: 12px;
+    margin: 0 12px;
   }
 
   &__content {
     margin-top: 12px;
+    text-align: center; /* Centering the content text */
   }
 }

@@ -1,51 +1,34 @@
 <div class="container">
   <div class="chat-container">
     <div class="chat-area" cdk-scrollable #scrollContainer>
-      @for (message of messages; track message) {
+
+      <ng-container *ngFor="let message of messages; trackBy: trackByMessage">
         <div [ngClass]="message.role === 'user' ? 'userMsg' : 'botMsg'">
-          <p markdown class="content">{{ message.content }}</p>
-          <!--          <app-drink-card [drink]="mock" />-->
+	        <div class="content" >
+			<p markdown>{{message.content}}</p>
+            		<app-drink-buttons *ngIf="message.role === 'assistant' && message.content.includes('Welcome to the Mixology Chat!')" [drinkNames]="drinkNames" (drinkSelected)="handleDrinkSelected($event)" (userMessage)="addUserMessage($event)"></app-drink-buttons>
+                  
+		</div>
+          <ng-container *ngIf="message.role === 'assistant' && message.drink">
+            <app-drink-card [drink]="message.drink"></app-drink-card>
+          </ng-container>
           <p class="role">
-            @switch (message.role) {
-              @case (Role.User) {
-                <span>💁🏻‍♀️</span>
-              }
-              @case (Role.Assistant) {
-                <span>🧚🏻‍♀️</span>
-              }
-            }
+            <span *ngIf="message.role === 'user'">💁🏻‍♀️</span>
+            <span *ngIf="message.role === 'assistant'">🧚🏻‍♀️</span>
           </p>
         </div>
-      } @empty {
-        <p class="flex items-center justify-center">Start typing to show something here...</p>
-      }
-      @if (loading) {
-        <div class="botMsg">
-          <p class="loader"></p>
-          <p class="role">
-            <span>🧚🏻‍♀️</span>
-          </p>
-        </div>
-      }
+      </ng-container>
+      <div *ngIf="loading" class="botMsg">
+        <p class="loader"></p>
+        <p class="role">
+          <span>🧚🏻‍♀️</span>
+        </p>
+      </div>
     </div>
 
-    <form
-      class="input-form"
-    >
-      <input
-        #messageInput
-        class="input"
-        placeholder="Type your message..."
-      >
-      <button
-        class="button"
-        type="submit"
-        (click)="sendMessage(messageInput.value); messageInput.value = ''">
-        🪄
-      </button>
+    <form class="input-form">
+      <input #messageInput class="input" placeholder="Type your message..." (keyup.enter)="sendMessage(messageInput.value); messageInput.value = ''">
+      <button class="button" type="button" (click)="sendMessage(messageInput.value); messageInput.value = ''">🪄</button>
     </form>
   </div>
 </div>
-
-
-

@@ -1,6 +1,6 @@
 export interface Drink {
   name: string;
   ingredients: string[];
-  image: string;
-  description: string;
+  recipe: string;
+  image?: string;
 }

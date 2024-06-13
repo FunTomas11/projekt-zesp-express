@@ -4,22 +4,33 @@ var router = express.Router();
 
 const { randomUUID } = require('crypto');
 const { Ollama } = require('ollama');
-const {modifyResponse} = require("../public/javascripts/responseModifier");
+const { modifyResponse } = require("../public/javascripts/responseModifier");
 
 const conversations = {};
 
-function formatPrompt(availableDrinks, availableIngredients, userMessage) {
-  return `You are an expert mixologist. Your primary goal is to help users discover and create delicious beverages.
-Guidelines:
-If the user asks about topics unrelated to drinks, politely acknowledge their comment and gently steer the conversation back to mixology.  
-Based on the user's input and the provided lists of available drinks try to provide helpful suggestions.
-At the end generate a drink recommendation in the following JSON format:
-\`\`\`json
-{"id":"drinkId","name":"drinkName"}
-\`\`\`
+function formatDetails(details) {
+  return JSON.stringify(details, (key, value) => {
+    if (key == "id") { return undefined; }
+    if (key === 'ingredients' && Array.isArray(value)) {
+      return value.join(', ');
+    }
+    if (key === 'recipe' && typeof value === 'string') {
+      //return value.replace(/\n/g, ' ');
+      return undefined;
+    }
+    return value;
+  });
+}
 
-Available drinks:
-${availableDrinks}
+function formatPrompt(availableDrinks, userMessage) {
+  const drinksFormatted = Object.entries(availableDrinks).map(([name, details]) => {
+    return `${name}: ${formatDetails(details)}`;
+  }).join(';');
+
+  return `You are an expert mixologist. Your job is to use your own knowledge to help users discover beverages, including both alcoholic and non-alcoholic drinks. Use your knowledge to answer questions.
+
+You have also received drink database, so you can look up the ingredients for a drink if you are not sure and reason about the question using this information:
+${drinksFormatted}
 
 User input:
 ${userMessage}
@@ -36,7 +47,7 @@ Generate a single drink recommendation. Always format the recommendation as JSON
 {"id":"drinkId","name":"drinkName"}
 \`\`\`
 
-Answer:\`\`\`json`;
+Answer:`;
 }
 
 function getDrinksImg(drinkId) {
@@ -56,6 +67,36 @@ function getDrinksImg(drinkId) {
           img = images[0].path
         } 
         resolve(img);
+      }
+    });
+  });
+}
+
+function getDrinkNames() {
+  return new Promise((resolve, reject) => {
+    const sql = 'SELECT name FROM drinks';
+
+    db.all(sql, (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        const drinks = rows.map(row => row.name);
+        resolve(drinks);
+      }
+    });
+  });
+}
+
+function getDrinkByName(name) {
+  return new Promise((resolve, reject) => {
+    const sql = 'SELECT * FROM drinks WHERE name = ?';
+
+    db.all(sql, [name], (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        const drink = rows[0];
+        resolve(drink);
       }
     });
   });
@@ -121,7 +162,7 @@ function getDrinks() {
 
       const drinks = {};
 
-      const ingredientPromises = drinkRows.map(drink => {
+      const drinkPromises = drinkRows.map(drink => {
         return new Promise((resolve, reject) => {
           const ingredientsSql = `
             SELECT ingredients.name 
@@ -130,75 +171,151 @@ function getDrinks() {
             WHERE drink_ingredients.drinkId = ?
           `;
 
-          db.all(ingredientsSql, [drink.id], (err, ingredientRows) => {
-            if (err) {
-              return reject(err);
-            }
+          const recipeSql = 'SELECT recipe FROM drinks WHERE id = ?';
 
-            const ingredientNames = ingredientRows.map(row => row.name);
-            drinks[drink.name] = ingredientNames;
-            resolve();
+          const ingredientsPromise = new Promise((resolve, reject) => {
+            db.all(ingredientsSql, [drink.id], (err, ingredientRows) => {
+              if (err) {
+                return reject(err);
+              }
+              const ingredientNames = ingredientRows.map(row => row.name);
+              resolve(ingredientNames);
+            });
           });
+
+          const recipePromise = new Promise((resolve, reject) => {
+            db.all(recipeSql, [drink.id], (err, recipeRows) => {
+              if (err) {
+                return reject(err);
+              }
+              const recipe = recipeRows.length > 0 ? recipeRows[0].recipe : '';
+              resolve(recipe);
+            });
+          });
+
+          Promise.all([ingredientsPromise, recipePromise])
+            .then(([ingredients, recipe]) => {
+              drinks[drink.name] = { id: drink.id, ingredients, recipe };
+              resolve();
+            })
+            .catch(err => reject(err));
         });
       });
 
-      Promise.all(ingredientPromises)
+      Promise.all(drinkPromises)
         .then(() => resolve(drinks))
         .catch(err => reject(err));
     });
   });
 }
 
-function getIngredients() {
-  return new Promise((resolve, reject) => {
-    const sql = 'SELECT * FROM ingredients';
+router.get('/getDrinkInfo', async (req, res) => {
+  const drinkName = req.query.drinkName;
+  try {
+    const drink = await getDrinkByName(drinkName);
+    if (!drink) {
+      return res.status(404).json({ error: 'Drink not found' });
+    }
+    const ingredients = await getDrinksIngredients(drink.id);
+    const recipe = await getDrinksRecipe(drink.id);
+    const image = await getDrinksImg(drink.id);
 
-    db.all(sql, [], (err, rows) => {
-      if (err) {
-        reject(err);
-      } else {
-        const ingredients = rows.map(row => ({
-          drinkId: row.drinkId,
-          name: row.name,
-        }));
-        resolve(JSON.stringify(ingredients));
-      }
-    });
-  });
-}
+    const drinkInfo = {
+      name: drink.name,
+      ingredients,
+      recipe,
+      image
+    };
+
+    res.json({ response: drinkInfo });
+  } catch (error) {
+    res.status(500).json({ error: 'Something went wrong' });
+  }
+});
+
+router.get('/getAvailableDrinks', async (req, res) => {
+  try {
+    const drinkNames = await getDrinkNames();
+    res.json({ response: drinkNames });
+  } catch (error) {
+    res.status(500).json({ error: 'Something went wrong' });
+  }
+});
+
+router.post('/updateHistory', async (req, res) => {
+  const { drink } = req.body;
+
+  let sessionId = req.headers['token'];
+
+  if (!sessionId || !drink) {
+    return res.status(400).json({ error: 'Invalid request body' });
+  }
+
+  if (!conversations[sessionId]) {
+    conversations[sessionId] = [];
+  }
+
+  const userMessage = {
+    role: 'user',
+    content: `I want to know more about ${drink.name}`
+  }
+
+  const assistantMessage = {
+    role: 'assistant',
+    content: `Here's the information for the drink ${drink.name}: Ingredients - ${drink.ingredients.join(', ')}. Recipe - ${drink.recipe}.`,
+  };
+  
+  conversations[sessionId].push(userMessage);
+  conversations[sessionId].push(assistantMessage);
+
+  res.json({ success: true, history: conversations[sessionId] });
+});
 
 router.post('/chat', async (req, res) => {
-  const userMessage = req.body.message;
+  let userMessage = req.body.message;
+  const drinkName = req.body.drink;
+  if (drinkName !== undefined && drinkName !== "") {
+    const drink = await getDrinkByName(drinkName);
+    console.log(drink);
+    userMessage = `Tell me more about the drink named ${drinkName}. Here are the details: ${JSON.stringify(drink)}`
+  }
 
-  let sessionId = req.headers['session-id'];
+  let sessionId = req.headers['token'];
   if (!sessionId) {
     sessionId = randomUUID();
-    res.setHeader('session-id', sessionId);
+    res.setHeader('token', sessionId);
   }
 
   const ollama = new Ollama();
 
   let conversationHistory = conversations[sessionId] || [];
 
-  if (conversationHistory.length <= 0) {
-    // const availableIngredients = await getIngredients();
+  const contextExists = conversationHistory.some(msg => msg.role === 'system');
+  if (!contextExists) {
     const availableDrinks = await getDrinks();
     const formattedPrompt = formatPrompt(availableDrinks, userMessage);
-    conversationHistory.push({ role: 'user', content: formattedPrompt });
-  } else {
-    const formattedSubPrompt = formatSubPrompt(userMessage);
-    conversationHistory.push({ role: 'user', content: formattedSubPrompt });
+    conversationHistory.unshift({ role: 'system', content: formattedPrompt });
   }
+
+  conversationHistory.push({ role: 'user', content: userMessage });
+
+  console.log(`Session ID: ${sessionId}`);
+  console.log('Request Headers:', req.headers);
+  console.log('Request Body:', req.body);
+  console.log('Conversation History:', conversationHistory);
 
   try {
     const response = await ollama.chat({
-        model: 'gemma:2b',
-        messages: conversationHistory,
+	    model: 'gemma:2b',
+      messages: conversationHistory,
     });
 
+    console.log(ollama)
+
+    console.log(`Received response: ${response.message.content}`)
     const modifiedResponse = modifyResponse(response.message.content);
 
-    let jsonResp = null
+    let jsonResp = null;
     if (modifiedResponse.json !== null) {
       let imagePath = await getDrinksImg(modifiedResponse.json.id);
       let recipe = await getDrinksRecipe(modifiedResponse.json.id);
@@ -207,7 +324,7 @@ router.post('/chat', async (req, res) => {
       jsonResp = {
         name: modifiedResponse.json.name,
         ingredients: ingredients,
-        description: recipe,
+        recipe: recipe,
         image: imagePath
       };
     }
@@ -220,20 +337,18 @@ router.post('/chat', async (req, res) => {
     conversationHistory.push({ role: 'assistant', content: response.message.content });
     conversations[sessionId] = conversationHistory;
 
+    console.log('Updated Conversation History:', conversationHistory);
+
     res.json({ response: formattedResponse });
 
-    console.log(sessionId);
-    console.log(conversations[sessionId]);
-
   } catch (error) {
-      console.error('Ollama error:', error);
-      res.status(500).json({ error: 'Something went wrong' });
+    console.error('Ollama error:', error);
+    res.status(500).json({ error: 'Something went wrong' });
   }
 });
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-
   res.render('index', { title: "world" });
 });
 
