@@ -1,4 +1,4 @@
-import { Component, Input, SimpleChanges } from '@angular/core';
+import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from "@angular/material/card";
 import { Drink } from "../../models/drink.model";
@@ -17,12 +17,9 @@ import { MatListModule } from "@angular/material/list";
   templateUrl: './drink-card.component.html',
   styleUrls: ['./drink-card.component.scss']
 })
+/**
+ * Komponent DrinkCardComponent, który wyświetla szczegóły drinka.
+ */
 export class DrinkCardComponent {
   @Input({ required: true }) drink!: Drink;
-
-   ngOnChanges(changes: SimpleChanges) {
-    if (changes['drink']) {
-      console.log('Drink input changed:', changes['drink'].currentValue);
-    }
-  }
 }

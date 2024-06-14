@@ -13,14 +13,26 @@ import {LoginService} from "./services/login.service";
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
+/**
+ * Główny komponent aplikacji AppComponent.
+ *
+ * Zawiera metodę sprawdzającą, czy użytkownik jest zalogowany,
+ * oraz metodę wylogowującą użytkownika.
+ */
 export class AppComponent {
 
+  /**
+   * Sprawdza, czy użytkownik jest zalogowany, na podstawie stanu z serwisu LoginService.
+   */
   get isUserLoggedIn(): boolean {
     return this._auth.isUserLoggedIn;
   }
-  constructor(private _auth: LoginService) {
-  }
 
+  constructor(private _auth: LoginService) {}
+
+  /**
+   * Wylogowuje użytkownika, wywołując metodę logout z serwisu LoginService.
+   */
   logout() {
     this._auth.logout();
   }

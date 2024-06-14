@@ -14,51 +14,59 @@ import {User} from "../../models/user.model";
     templateUrl: './login.component.html',
     styleUrl: './login.component.scss',
 })
+/**
+ * Komponent LoginComponent odpowiedzialny za obsługę logowania i rejestracji użytkowników.
+ */
 export class LoginComponent {
 
-    loginForm = new FormGroup({
-        username: new FormControl('', Validators.required),
-        password: new FormControl('', Validators.required)
+  // Formularz logowania z polami użytkownika i hasła, oba pola są wymagane.
+  loginForm = new FormGroup({
+    username: new FormControl('', Validators.required),
+    password: new FormControl('', Validators.required)
+  });
+
+  // Formularz rejestracji z polami użytkownika i hasła, oba pola są wymagane.
+  registerForm = new FormGroup({
+    username: new FormControl('', Validators.required),
+    password: new FormControl('', Validators.required)
+  });
+
+  constructor(private _backend: LoginService) {}
+
+  /**
+   * Metoda logowania użytkownika. Sprawdza, czy wszystkie pola formularza logowania są wypełnione.
+   * Jeśli nie, wyświetla komunikat błędu. Jeśli tak, wysyła dane użytkownika do serwisu backendowego.
+   */
+  login() {
+    if (!this.loginForm.value.username ||
+      !this.loginForm.value.password ||
+      this.loginForm.value.username === '' ||
+      this.loginForm.value.password === '') {
+      console.error('Please fill in all fields', this.loginForm.value);
+      return;
+    }
+    const user: User = {username: this.loginForm.value.username, password: this.loginForm.value.password};
+
+    this._backend.loginUser(user).subscribe((res) => {
+      console.log('Co backend ma na myśli', res);
     });
+  }
 
-    registerForm = new FormGroup({
-      username: new FormControl('', Validators.required),
-      password: new FormControl('', Validators.required)
-    });
-
-    constructor(private _backend: LoginService) {
+  /**
+   * Metoda rejestracji użytkownika. Sprawdza, czy wszystkie pola formularza rejestracji są wypełnione.
+   * Jeśli nie, wyświetla komunikat błędu. Jeśli tak, wysyła dane użytkownika do serwisu backendowego.
+   */
+  register() {
+    if (!this.registerForm.value.username ||
+      !this.registerForm.value.password ||
+      this.registerForm.value.username === '' ||
+      this.registerForm.value.password === '') {
+      console.error('Please fill in all fields', this.registerForm.value);
+      return;
     }
+    const user: User = {username: this.registerForm.value.username, password: this.registerForm.value.password};
 
-    login() {
-        if (!this.loginForm.value.username ||
-            !this.loginForm.value.password ||
-            this.loginForm.value.username === '' ||
-            this.loginForm.value.password === '') {
-            console.error('Please fill in all fields', this.loginForm.value);
-
-            return;
-        }
-        const user: User = {username: this.loginForm.value.username, password: this.loginForm.value.password};
-
-        this._backend.loginUser(user).subscribe((res) => {
-            console.log('Co backend ma na myśli', res);
-        });
-
-    }
-
-    register() {
-        if (!this.registerForm.value.username ||
-            !this.registerForm.value.password ||
-            this.registerForm.value.username === '' ||
-            this.registerForm.value.password === '') {
-            console.error('Please fill in all fields', this.registerForm.value);
-
-            return;
-        }
-        const user: User = {username: this.registerForm.value.username, password: this.registerForm.value.password};
-
-        this._backend.registerUser(user).subscribe((res) => {
-            console.log('Co backend ma na myśli', res);
-        });
-    }
+    this._backend.registerUser(user).subscribe();
+  }
 }
+

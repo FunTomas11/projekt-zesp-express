@@ -12,13 +12,24 @@ import { Message, Role } from '../../models/message.model';
   templateUrl: './drink-buttons.component.html',
   styleUrls: ['./drink-buttons.component.scss']
 })
+/**
+ * Komponent DrinkButtonsComponent, który wyświetla listę przycisków z nazwami drinków
+ * i obsługuje kliknięcia na te przyciski.
+ */
 export class DrinkButtonsComponent {
-  @Input() drinkNames: string[] = [];
-  @Output() drinkSelected = new EventEmitter<any>(); // EventEmitter to emit selected drink info
-  @Output() userMessage = new EventEmitter<string>();
+  @Input() drinkNames: string[] = []; // Lista nazw drinków przekazana do komponentu
+  @Output() drinkSelected = new EventEmitter<any>(); // EventEmitter do emisji informacji o wybranym drinku
+  @Output() userMessage = new EventEmitter<string>(); // EventEmitter do emisji wiadomości użytkownika
 
   constructor(private drinkService: DrinkService) {}
 
+  /**
+   * Metoda uruchamiana po kliknięciu na nazwę drinka.
+   * Wyświetla w konsoli kliknięty drink, emituje wiadomość użytkownika,
+   * pobiera informacje o drinku z serwisu drinkService i emituje te informacje.
+   *
+   * @param {string} drink - Nazwa klikniętego drinka.
+   */
   onDrinkClick(drink: string): void {
     console.log(`Drink clicked: ${drink}`);
     this.userMessage.emit(`Tell me more about ${drink}`);
@@ -33,3 +44,4 @@ export class DrinkButtonsComponent {
     );
   }
 }
+

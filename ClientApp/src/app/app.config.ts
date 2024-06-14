@@ -6,11 +6,16 @@ import { SessionInterceptor } from './interceptors/session.interceptor';
 
 import { routes } from './app.routes';
 
+/**
+ * Konfiguracja aplikacji.
+ *
+ * @property {Array} providers - Lista dostawców usług używanych przez aplikację.
+ */
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes),
-    provideAnimationsAsync(),
-    provideHttpClient(),
-    { provide: HTTP_INTERCEPTORS, useClass: SessionInterceptor, multi: true },
+    provideRouter(routes), // Dostawca usług routera z konfiguracją tras.
+    provideAnimationsAsync(), // Dostawca usług animacji.
+    provideHttpClient(), // Dostawca usług HTTP klienta.
+    { provide: HTTP_INTERCEPTORS, useClass: SessionInterceptor, multi: true }, // Dostawca interceptorów HTTP z klasą SessionInterceptor.
   ],
 };

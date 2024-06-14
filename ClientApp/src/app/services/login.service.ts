@@ -9,15 +9,25 @@ import {environment} from "../../environments/environment.development";
 @Injectable({
   providedIn: 'root'
 })
+/**
+ * Serwis LoginService odpowiedzialny za logowanie, rejestrację i wylogowywanie użytkowników,
+ * zarządzanie tokenem sesji oraz nawigację w aplikacji.
+ */
 export class LoginService {
   private _token: string | null;
   private _apiUrl = environment.apiUrl;
   private _userUrl = `${this._apiUrl}/users`;
 
+  /**
+   * Sprawdza, czy użytkownik jest zalogowany na podstawie obecności tokena.
+   */
   get isUserLoggedIn(): boolean {
     return !!this._token;
   }
 
+  /**
+   * Ustawia token sesji, przechowując go w sessionStorage i lokalnej zmiennej.
+   */
   set token(token: string) {
     sessionStorage.setItem('token', token);
     this._token = token;
@@ -30,6 +40,12 @@ export class LoginService {
     }
   }
 
+  /**
+   * Loguje użytkownika, zapisując token sesji i nawigując do strony czatu.
+   *
+   * @param {User} user - Dane użytkownika do zalogowania.
+   * @returns {Observable<any>} - Observable zawierające odpowiedź z backendu.
+   */
   loginUser(user: User): Observable<any> {
     return this._http.post<any>(`${this._userUrl}/login`, user)
       .pipe(
@@ -43,6 +59,12 @@ export class LoginService {
       );
   }
 
+  /**
+   * Rejestruje nowego użytkownika, zapisując token sesji i nawigując do strony czatu.
+   *
+   * @param {User} user - Dane użytkownika do rejestracji.
+   * @returns {Observable<any>} - Observable zawierające odpowiedź z backendu.
+   */
   registerUser(user: User) {
     return this._http.post<any>(`${this._userUrl}/register`, user)
       .pipe(
@@ -53,14 +75,16 @@ export class LoginService {
           this._snack.open('Unable to register: ' + err.error.error, 'OK', {duration: 2000});
           throw err;
         })
-        );
+      );
   }
 
+  /**
+   * Wylogowuje użytkownika, usuwając token sesji i nawigując do strony logowania.
+   */
   logout() {
     sessionStorage.removeItem('token');
     this._token = null;
     this._router.navigate(['/login']).then(noop);
     this._snack.open('Logged out', 'OK', {duration: 2000});
   }
-
 }
