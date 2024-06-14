@@ -16,7 +16,15 @@
     flex-wrap: wrap;
     margin-top: 12px;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+
+    h3 {
+      font-weight: bold;
+    }
+
+    @media screen and (max-width: 768px) {
+      flex-direction: column;
+    }
   }
 
   &__ingredients-list {
@@ -40,6 +48,6 @@
 
   &__content {
     margin-top: 12px;
-    text-align: center; /* Centering the content text */
+    text-align: left;
   }
 }
