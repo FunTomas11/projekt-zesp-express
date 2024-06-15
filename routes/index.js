@@ -51,24 +51,6 @@ Answer:`;
 }
 
 /**
- * Formatuje subprompt do wysyłki do modelu AI, zawierający wiadomość użytkownika.
- *
- * @param {string} userMessage - Wiadomość użytkownika.
- * @returns {string} - Sformatowany subprompt.
- */
-function formatSubPrompt(userMessage) {
-  return `User input:
-${userMessage}
-
-Generate a single drink recommendation. Always format the recommendation as JSON in the following format:
-\`\`\`json
-{"id":"drinkId","name":"drinkName"}
-\`\`\`
-
-Answer:`;
-}
-
-/**
  * Pobiera obraz drinka z bazy danych na podstawie jego ID.
  *
  * @param {string} drinkId - ID drinka.
@@ -316,11 +298,21 @@ router.post('/updateHistory', async (req, res) => {
     conversations[sessionId] = [];
   }
 
+  /**
+   * Kiedy użytkownik kilka guzik z nazwą drinka, to żadanie
+   * jest również przekonwertowane na wiadomość od użtkownika
+   * w takiej postaci:
+   */
   const userMessage = {
     role: 'user',
     content: `I want to know more about ${drink.name}`
   }
 
+  /**
+   * Kiedy użytkownik kilka guzik z nazwą drinka, to odpowiedź na żądanie
+   * jest również przekonwertowane na wiadomość od asystenta
+   * w takiej postaci:
+   */
   const assistantMessage = {
     role: 'assistant',
     content: `Here's the information for the drink ${drink.name}: Ingredients - ${drink.ingredients.join(', ')}. Recipe - ${drink.recipe}.`,
