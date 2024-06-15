@@ -350,13 +350,6 @@ router.post('/chat', async (req, res) => {
   let userMessage = req.body.message;
   const drinkName = req.body.drink;
 
-  // // Jeśli nazwa drinka jest określona, dodaj szczegóły drinka do wiadomości użytkownika
-  // if (drinkName !== undefined && drinkName !== "") {
-  //   const drink = await getDrinkByName(drinkName);
-  //   console.log(drink);
-  //   userMessage = `Tell me more about the drink named ${drinkName}. Here are the details: ${JSON.stringify(drink)}`;
-  // }
-
   let sessionId = req.headers['token'];
   if (!sessionId) {
     sessionId = randomUUID();
